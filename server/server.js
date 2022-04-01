@@ -3,6 +3,22 @@ const app = express()
 const mysql = require('mysql');
 const bodyparser = require('body-parser')
 const cors = require("cors")
+const helmet = require("helmet")
+const session = require("cookie-session")
+
+//cookie-session middleware to prevent server profiling and cookie based attacks
+const expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour expiry
+app.use(session({
+    name: 'session',
+    keys: ['key1', 'key2'],
+    cookie: {
+        secure: true,
+        httpOnly: true,
+        expires: expiryDate
+    }
+}))
+
+app.use(helmet()) //HTTP header vulnerability protection
 
 app.use(cors())
 
