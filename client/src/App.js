@@ -2,9 +2,12 @@ import './App.css';
 import React from 'react'
 import Companies from './components/Companies';
 import Patient from './components/Patient';
+import PatientDemo from './components/PatientDemo';
 import Home from './components/Home';
 import Insurance from './components/Insurance';
 import Medical from './components/Medical';
+import Doctor from './components/Doctor';
+import Providers from './components/Providers';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
 
 function App() {
