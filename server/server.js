@@ -196,3 +196,28 @@ app.post('/addappointments', (req,res) => {
     })
 
 })
+
+app.put('/updatepatient', (req,res) => {
+    const phone = req.body.phone
+    const name = req.body.name
+
+    mysqlConnection.query("UPDATE employees SET phone = ? WHERE name = ?", [phone, name], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.delete('/deletepatient/:name', (req,res) => {
+    const name = req.params.name
+    
+    mysqlConnection.query("DELETE FROM patient WHERE name = ?", name, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
