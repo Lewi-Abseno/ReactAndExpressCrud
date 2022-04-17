@@ -16,13 +16,7 @@ function Medical() {
             setmysqlData(data)
           }
         )
-    },[])
-
-    console.log(name)
-    //console.log(mysqlData)
-    //console.log(mysqlData.filter(x => x.name == name))
-
-    
+    },[])    
 
     return (
         <div className='medical'>
@@ -41,11 +35,3 @@ function Medical() {
 }
 
 export default Medical;
-
-//{mysqlData.map(x => (
-//  <h3>{x["ssn"]} {" , "} {x["systolic"]} {" , "} {x["diastolic"]} {" , "} {x["heart_rate"]} {" , "} {x["respirations"]} {" , "} {x["height"]} {" , "} {x["weight"]} </h3>
-//  ))}
-
-//{mysqlData.filter(x => x.name == name).map(filteredName => (
-//  <h3> {filteredName} </h3>
-//  ))}
