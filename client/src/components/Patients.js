@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import "../App.css"
+import Patientfilter from './Patientfilter'
 
 function PatientDemo() {
     
     const [mysqlData, setmysqlData] = useState([{}])
+    const [tempName, setTempName] = useState("")
+    const [name, setName] = useState("")
 
     useEffect(() => {
-        fetch("http://localhost:5000/patients").then(
+        fetch("/patients").then(
           response => response.json()
         ).then(
           data =>{
@@ -15,14 +18,18 @@ function PatientDemo() {
         )
     },[])
 
-
+  
     return (
         <div className='patientDemo'>
             <h1> Patients</h1>
           <div className='patientDemo'>
-          {mysqlData.map(x => (
-            <h3>{x["ssn"]} {" , "} {x["gender"]} {" , "} {x["race"]} {" , "} {x["age"]} </h3>
-          ))}
+            <input type="text" onChange={(event) => {
+                setTempName(event.target.value)
+                }} />
+              <button onClick={() =>{
+                setName(tempName)
+              }}> Search </button>
+              <Patientfilter data={mysqlData} name={name} />
           </div>
         </div>
     );

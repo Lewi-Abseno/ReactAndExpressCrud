@@ -40,7 +40,7 @@ app.get('/companies', (req, res) => {
 })
 
 app.get('/medicalinfo', (req,res) => {
-    mysqlConnection.query('SELECT * FROM medical_info', (err, rows, fields) => {
+    mysqlConnection.query('SELECT * FROM medical_info JOIN patient ON medical_info.ssn = patient.ssn', (err, rows, fields) => {
         if(!err)
         res.json(rows)
         else
@@ -85,7 +85,7 @@ app.get('/provider', (req,res) => {
 })
 
 app.get('/patients', (req,res) => {
-    mysqlConnection.query('SELECT * FROM patient',(err,rows,fields) => {
+    mysqlConnection.query('SELECT * FROM patient JOIN patient_demo ON patient.ssn = patient_demo.ssn',(err,rows,fields) => {
         if(!err)
         res.json(rows)
         else
