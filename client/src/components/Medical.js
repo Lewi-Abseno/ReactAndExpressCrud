@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "../App.css"
 import Medicalfilter from './Medicalfilter'
+import { Container, Row, Col, Form, Button} from "react-bootstrap"
 
 function Medical() {
     
@@ -19,18 +20,29 @@ function Medical() {
     },[])    
 
     return (
-        <div className='medical'>
-            <h1> Medical Info </h1>
-          <div className='medical'>
-            <input type="text" onChange={(event) => {
-              setTempName(event.target.value)
-              }} />
-            <button onClick={() =>{
-              setName(tempName)
-            }}> Search </button>
-            <Medicalfilter data={mysqlData} name={name} />
-          </div>
-        </div>
+          <Container classname='d-flex align-items-center justify-content-center pt-5'>
+              <h1> Patient Medical Information Lookup</h1>
+              <Form>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="name" placeholder="Search Name" onChange={(event) => {
+                  setTempName(event.target.value)
+                  }} />
+                </Form.Group>
+                <Button variant="primary" type="button" onClick={() =>{
+                  setName(tempName)
+                }}>
+                Search
+                </Button>
+              </Form>
+              <div className='row-margin'>
+                <div>
+                  <Medicalfilter data={mysqlData} name={name} />
+                </div>
+                
+              </div>
+              
+          </Container>
     );
 }
 
