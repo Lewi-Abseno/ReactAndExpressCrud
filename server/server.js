@@ -1,9 +1,28 @@
+require('dotenv').config();
+
 const express = require('express')
 const app = express()
 const mysql = require('mysql');
-const bodyparser = require('body-parser')
+const bodyParser = require('body-parser')
 const cors = require("cors")
 var APIRouter = require("./API");
+
+const helmet = require("helmet")
+const session = require("cookie-session")
+
+//cookie-session middleware to prevent server profiling and cookie based attacks
+const expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour expiry
+app.use(session({
+    name: 'session',
+    keys: ['key1', 'key2'],
+    cookie: {
+        secure: true,
+        httpOnly: true,
+        expires: expiryDate
+    }
+}))
+
+app.use(helmet()) //HTTP header vulnerability protection
 
 app.use(cors());
 app.use(express.json());
@@ -11,24 +30,11 @@ app.use(express.urlencoded({ extended: true}));
 
 app.listen(5000, () => console.log('server started on port 5000'))
 
-app.use(bodyparser.json())
+app.use(bodyParser.json())
 
 app.use("/API", APIRouter);
 
-var mysqlConnection = mysql.createConnection({
-    host:'mysql01.cs.virginia.edu',
-    user:'lna5nn',
-    password:'Winter2022!!',
-    database:'lna5nn',
-    multipleStatements: true
-});
-
-mysqlConnection.connect((err)=>{
-    if(!err)
-    console.log('DB connection succeeded');
-    else
-    console.log('DB connection failed' + JSON.stringify(err,undefined,2));
-})
+const mysqlConnection = require('./database');
 
 app.get('/companies', (req, res) => {
     mysqlConnection.query('SELECT * FROM companies', (err, rows, fields) =>{
