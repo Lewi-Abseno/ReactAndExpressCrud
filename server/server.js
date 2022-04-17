@@ -3,16 +3,17 @@ const app = express()
 const mysql = require('mysql');
 const bodyparser = require('body-parser')
 const cors = require("cors")
+var APIRouter = require("./API");
 
-app.use(cors())
-
-app.get("/api", (req, res) => {
-    res.json({"users": ["userOne", "userTwo", "userThree","userFour"]})
-})
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
 app.listen(5000, () => console.log('server started on port 5000'))
 
 app.use(bodyparser.json())
+
+app.use("/API", APIRouter);
 
 var mysqlConnection = mysql.createConnection({
     host:'mysql01.cs.virginia.edu',
@@ -138,7 +139,7 @@ app.post('/addinsuranceinfo', (req,res) => {
 })
 
 
-app.post('/medicalinfo', (req,res) => {
+app.post('/addmedicalinfo', (req,res) => {
     const ssn = req.body.ssn
     const systolic = req.body.systolic
     const diastolic = req.body.diastolic
@@ -148,7 +149,8 @@ app.post('/medicalinfo', (req,res) => {
     const weight = req.body.weight
 
 
-    mysqlConnection.query("INSERT INTO `lna5nn`.`medical_info` (`ssn`, `systolic`, `diastolic`, 'heartrate', 'respirations', 'height', 'weight') VALUES (?, ?, ?, ?, ?, ?, ?)", [ssn, systolic, diastolic, heartrate, respirations, height, weight], (err, result) => {
+    mysqlConnection.query("INSERT INTO `lna5nn`.`medical_info` (`ssn`, `systolic`, `diastolic`, 'heartrate', 'respirations', 'height', 'weight') VALUES (?, ?, ?, ?, ?, ?, ?)", 
+    [ssn, systolic, diastolic, heartrate, respirations, height, weight], (err, result) => {
         if (err) {
             console.log(err)
         } else {

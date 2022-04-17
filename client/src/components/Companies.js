@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import "../App.css"
+import React, { useEffect, useState } from 'react';
+//import { Axios } from 'axios';
+import "../App.css";
 
 function Companies() {
     
     const [mysqlData, setmysqlData] = useState([{}])
 
     useEffect(() => {
-        fetch("/companies").then(
+        fetch("http://localhost:5000/companies").then(
           response => response.json()
         ).then(
           data =>{
