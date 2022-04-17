@@ -1,33 +1,40 @@
+require('dotenv').config();
+
 const express = require('express')
 const app = express()
 const mysql = require('mysql');
-const bodyparser = require('body-parser')
+const bodyParser = require('body-parser')
 const cors = require("cors")
+var APIRouter = require("./API");
 
-app.use(cors())
+const helmet = require("helmet")
+const session = require("cookie-session")
 
-app.get("/api", (req, res) => {
-    res.json({"users": ["userOne", "userTwo", "userThree","userFour"]})
-})
+//cookie-session middleware to prevent server profiling and cookie based attacks
+const expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour expiry
+app.use(session({
+    name: 'session',
+    keys: ['key1', 'key2'],
+    cookie: {
+        secure: true,
+        httpOnly: true,
+        expires: expiryDate
+    }
+}))
+
+app.use(helmet()) //HTTP header vulnerability protection
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
 app.listen(5000, () => console.log('server started on port 5000'))
 
-app.use(bodyparser.json())
+app.use(bodyParser.json())
 
-var mysqlConnection = mysql.createConnection({
-    host:'mysql01.cs.virginia.edu',
-    user:'lna5nn',
-    password:'Winter2022!!',
-    database:'lna5nn',
-    multipleStatements: true
-});
+app.use("/API", APIRouter);
 
-mysqlConnection.connect((err)=>{
-    if(!err)
-    console.log('DB connection succeeded');
-    else
-    console.log('DB connection failed' + JSON.stringify(err,undefined,2));
-})
+const mysqlConnection = require('./database');
 
 app.get('/companies', (req, res) => {
     mysqlConnection.query('SELECT * FROM companies', (err, rows, fields) =>{
@@ -39,7 +46,7 @@ app.get('/companies', (req, res) => {
 })
 
 app.get('/medicalinfo', (req,res) => {
-    mysqlConnection.query('SELECT * FROM medical_info', (err, rows, fields) => {
+    mysqlConnection.query('SELECT * FROM medical_info JOIN patient ON medical_info.ssn = patient.ssn', (err, rows, fields) => {
         if(!err)
         res.json(rows)
         else
@@ -84,7 +91,7 @@ app.get('/provider', (req,res) => {
 })
 
 app.get('/patients', (req,res) => {
-    mysqlConnection.query('SELECT * FROM patient',(err,rows,fields) => {
+    mysqlConnection.query('SELECT * FROM patient JOIN patient_demo ON patient.ssn = patient_demo.ssn',(err,rows,fields) => {
         if(!err)
         res.json(rows)
         else
@@ -138,7 +145,7 @@ app.post('/addinsuranceinfo', (req,res) => {
 })
 
 
-app.post('/medicalinfo', (req,res) => {
+app.post('/addmedicalinfo', (req,res) => {
     const ssn = req.body.ssn
     const systolic = req.body.systolic
     const diastolic = req.body.diastolic
@@ -148,7 +155,8 @@ app.post('/medicalinfo', (req,res) => {
     const weight = req.body.weight
 
 
-    mysqlConnection.query("INSERT INTO `lna5nn`.`medical_info` (`ssn`, `systolic`, `diastolic`, 'heartrate', 'respirations', 'height', 'weight') VALUES (?, ?, ?, ?, ?, ?, ?)", [ssn, systolic, diastolic, heartrate, respirations, height, weight], (err, result) => {
+    mysqlConnection.query("INSERT INTO `lna5nn`.`medical_info` (`ssn`, `systolic`, `diastolic`, 'heartrate', 'respirations', 'height', 'weight') VALUES (?, ?, ?, ?, ?, ?, ?)", 
+    [ssn, systolic, diastolic, heartrate, respirations, height, weight], (err, result) => {
         if (err) {
             console.log(err)
         } else {

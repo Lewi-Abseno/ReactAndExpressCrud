@@ -1,30 +1,48 @@
 import React, { useEffect, useState } from 'react'
 import "../App.css"
+import Medicalfilter from './Medicalfilter'
+import { Container, Row, Col, Form, Button} from "react-bootstrap"
 
 function Medical() {
     
     const [mysqlData, setmysqlData] = useState([{}])
+    const [tempName, setTempName] = useState("")
+    const [name, setName] = useState("")
 
     useEffect(() => {
-        fetch("/medical").then(
+        fetch("/medicalinfo").then(
           response => response.json()
         ).then(
           data =>{
             setmysqlData(data)
           }
         )
-    },[])
-
+    },[])    
 
     return (
-        <div className='medical'>
-            <h1> Medical Info </h1>
-          <div className='medical'>
-          {mysqlData.map(x => (
-            <h3>{x["ssn"]} {" , "} {x["systolic"]} {" , "} {x["diastolic"]} {" , "} {x["heart_rate"]} {" , "} {x["respirations"]} {" , "} {x["height"]} {" , "} {x["weight"]} </h3>
-          ))}
-          </div>
-        </div>
+          <Container classname='d-flex align-items-center justify-content-center pt-5'>
+              <h1> Patient Medical Information Lookup</h1>
+              <Form>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="name" placeholder="Search Name" onChange={(event) => {
+                  setTempName(event.target.value)
+                  }} />
+                </Form.Group>
+                <Button variant="primary" type="button" onClick={() =>{
+                  setName(tempName)
+                }}>
+                Search
+                </Button>
+              </Form>
+              <div className='row-margin'>
+                <div>
+                  <Medicalfilter data={mysqlData} name={name} />
+                </div>
+                
+              </div>
+              
+          </Container>
     );
 }
 
