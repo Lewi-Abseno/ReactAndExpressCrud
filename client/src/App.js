@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Nav, Navbar, NavDropdown, Container } from 'react-bootstrap';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import axios from "axios";
 
 import Companies from './components/Companies';
 import Patient from './components/Patients';
@@ -21,7 +20,7 @@ class App extends Component {
     super(props);
     this.state = { apiResponse: "" };
   }
-
+  
   callAPI() {
     fetch("http://localhost:5000/API")
         .then(res => res.text())
@@ -65,7 +64,7 @@ class App extends Component {
           <Route path="/Medical" element={<Medical />} />
           <Route path="/Doctor" element={<Doctor />} />
           <Route path="/Providers" element={<Providers />} />
-          <Route path="/Appointments" element={Appointment} />
+          <Route path="/Appointments" element={<Appointment />} />
         </Routes>
       </Router>
     );

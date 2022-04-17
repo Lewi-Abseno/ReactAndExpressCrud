@@ -1,31 +1,76 @@
-import React, { useEffect, useState } from 'react'
-import "../App.css"
+import React, { Component } from 'react'
+import BootstrapTable from "react-bootstrap-table-next";
+import filterFactory, { selectFilter } from "react-bootstrap-table2-filter";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import axios from 'axios';
+import "../App.css";
 
-function Insurance() {
-    
-    const [mysqlData, setmysqlData] = useState([{}])
+const selectOptions = {
+    "Aetna\r": 'Aetna',
+    "Anthem Inc.\r": 'Anthem Inc.',
+    "Centene\r": 'Centene',
+    "Cigna\r": 'Cigna',
+    "CVS\r": 'CVS',
+    "Humana\r": 'Humana',
+    "Kaiser\r": 'Kaiser',
+    "United Health\r": 'United Health'
+}
 
-    useEffect(() => {
-        fetch("/insurance").then(
-          response => response.json()
-        ).then(
-          data =>{
-            setmysqlData(data)
-          }
-        )
-    },[])
+class Insurance extends Component {
+	
 
+  state = {
+		ins: [],
+		columns: [
+			{
+				dataField: "id",
+				text: "SSN",
+			},
+			{
+				dataField: "pol_num",
+				text: "Policy Number",
+			},
+			{
+				dataField: "company",
+				text: "Company Name ",
+				filter: selectFilter({
+          options: selectOptions
+        })
+			}
+		]
+	};
 
-    return (
-        <div className='insurance'>
-            <h1> Insurance Policies </h1>
-          <div className='insurance'>
-          {mysqlData.map(x => (
-            <h3>{x["ssn"]} {" , "} {x["policyNumber"]} {" , "} {x["companyName"]} </h3>
-          ))}
-          </div>
-        </div>
-    );
+	componentDidMount() {
+		axios
+			.get("http://localhost:5000/insurance")
+			.then(json =>
+				json.data.map(item => ({
+					id: item.ssn,
+					pol_num: item.policyNumber,
+					company: JSON.parse(JSON.stringify(item.companyName)).replace(/"/g,"")
+				}))
+			)
+			.then(
+				newData => this.setState({ ins: newData })
+			)
+			.catch(error => alert(error));
+	}
+
+	render() {
+		return (
+			<div className="container" style={{ marginTop: 50 }}>
+				<BootstrapTable
+					striped
+					hover
+					keyField="id"
+					data={this.state.ins}
+					columns={this.state.columns}
+					filter={filterFactory()}
+					pagination={paginationFactory()}
+				/>
+			</div>
+		);
+	}
 }
 
 export default Insurance;
