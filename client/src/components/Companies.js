@@ -1,31 +1,41 @@
 import React, { useEffect, useState } from 'react';
-//import { Axios } from 'axios';
+import { Table } from 'react-bootstrap';
 import "../App.css";
 
 function Companies() {
     
-    const [mysqlData, setmysqlData] = useState([{}])
+    const [data, setData] = useState([{}])
 
     useEffect(() => {
         fetch("http://localhost:5000/companies").then(
           response => response.json()
         ).then(
           data =>{
-            setmysqlData(data)
+            setData(data)
           }
         )
     },[])
 
 
     return (
-        <div className='companies'>
-            <h1> Companies and their numbers </h1>
-          <div className='companies'>
-          {mysqlData.map(x => (
-            <h3>{x["companyName"]} {": "} {x["companyPhone"]}</h3>
-          ))}
-          </div>
-        </div>
+      <div className="container" style={{ marginTop: 50 }}>
+        <Table striped border hover responsive="sm">  
+        <thead class="thead-dark">  
+            <tr>  
+                <th scope="col">Company Name</th>  
+                <th scope="col">Company Phone</th>  
+            </tr>  
+        </thead>  
+        <tbody>  
+            {data.map(item => {  
+                return <tr key={item["companyName"]}>
+                    <td>{item.companyName}</td>  
+                    <td>{item.companyPhone}</td>  
+                </tr>  
+            })}  
+        </tbody>  
+      </Table>
+      </div>
     );
 }
 

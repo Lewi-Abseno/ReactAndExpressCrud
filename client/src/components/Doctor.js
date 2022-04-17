@@ -1,31 +1,46 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
 import "../App.css"
 
 function Doctor() {
     
-    const [mysqlData, setmysqlData] = useState([{}])
+  const [data, setData] = useState([{}])
 
-    useEffect(() => {
-        fetch("/doctor").then(
-          response => response.json()
-        ).then(
-          data =>{
-            setmysqlData(data)
-          }
-        )
-    },[])
+  useEffect(() => {
+      fetch("http://localhost:5000/doctors").then(
+        response => response.json()
+      ).then(
+        data =>{
+          setData(data)
+        }
+      )
+  },[])
 
 
-    return (
-        <div className='doctor'>
-            <h1> Doctors </h1>
-          <div className='doctor'>
-          {mysqlData.map(x => (
-            <h3>{x["employeeNumber"]} {" , "} {x["name"]} {" , "} {x["phone"]} {" , "} {x["email"]} </h3>
-          ))}
-          </div>
-        </div>
-    );
+  return (
+    <div className="container" style={{ marginTop: 50 }}>
+      <Table striped border hover responsive="sm">  
+      <thead class="thead-dark">  
+          <tr>  
+              <th scope="col">Employee Number</th>  
+              <th scope="col">Doctor Name</th>
+              <th scope="col">Doctor Phone</th>  
+              <th scope="col">Doctor Email</th>    
+          </tr>  
+      </thead>  
+      <tbody>  
+          {data.map(item => {  
+              return <tr key={item["employeeNumber"]}>
+                  <td>{item.employeeNumber}</td>  
+                  <td>{item.name}</td>  
+                  <td>{item.phone}</td>  
+                  <td>{item.email}</td>  
+              </tr>  
+          })}  
+      </tbody>  
+    </Table>
+    </div>
+  );
 }
 
 export default Doctor;
