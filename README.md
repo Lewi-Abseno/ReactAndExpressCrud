@@ -1,6 +1,6 @@
 # HospitalAdminManagementApplication
 
-Below are launch explanation starting from ./
+Below are launch explanations starting from ./
 
 cd client 
 npm install 
