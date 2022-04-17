@@ -13,7 +13,7 @@ function Patient() {
     const [age, setAge] = useState(0)
 
     const addPatient = () => {
-        axios.post('/patient', {SSN: SSN, name: name, email: email, phone: phone, race: race, age: age}).then((()=>console.log("Sucess")))
+        axios.post('/patient', {SSN: SSN, name: name, email: email, phone: phone, race: race, age: age}).then((()=>console.log("Success")))
     }
 
     return (

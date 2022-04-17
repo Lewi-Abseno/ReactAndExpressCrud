@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from "axios";
 
 import Companies from './components/Companies';
-import Patient from './components/Patient';
+import Patient from './components/Patients';
 import Home from './components/Home';
 import Insurance from './components/Insurance';
 import Medical from './components/Medical';
