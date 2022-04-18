@@ -28,7 +28,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
-app.listen(5000, () => console.log('server started on port 5000'))
+app.listen(8080, () => console.log('server started on port 8080'))
 
 app.use(bodyParser.json())
 
@@ -91,7 +91,7 @@ app.get('/provider', (req,res) => {
 })
 
 app.get('/patients', (req,res) => {
-    mysqlConnection.query('SELECT * FROM patient JOIN patient_demo ON patient.ssn = patient_demo.ssn',(err,rows,fields) => {
+    mysqlConnection.query('SELECT * FROM patient',(err,rows,fields) => {
         if(!err)
         res.json(rows)
         else
@@ -118,7 +118,7 @@ app.post('/addpatient', (req, res) =>{
     const race = req.body.race
     const age = req.body.age
 
-    mysqlConnection.query("INSERT INTO `lna5nn`.`patient` (`ssn`, `name`, `email`, `phone`, `race`, `age`) VALUES (?, ?, ?, ?, ?, ?)", [ssn, name, email, phone, race, age], (err, result) => {
+    mysqlConnection.query("INSERT INTO patient (ssn, name, email, phone, race, age) VALUES (?, ?, ?, ?, ?, ?)", [ssn, name, email, phone, race, age], (err, result) => {
         if (err) {
             console.log(err)
         } else {
@@ -195,4 +195,29 @@ app.post('/addappointments', (req,res) => {
         }
     })
 
+})
+
+app.put('/updatepatient', (req,res) => {
+    const phone = req.body.phone
+    const name = req.body.name
+
+    mysqlConnection.query("UPDATE patient SET phone = ? WHERE name = ?", [phone, name], (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+})
+
+app.delete('/deletepatient/:name', (req,res) => {
+    const name = req.params.name
+    
+    mysqlConnection.query("DELETE FROM patient WHERE name = ?", name, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
 })

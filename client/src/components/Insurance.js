@@ -42,7 +42,7 @@ class Insurance extends Component {
 
 	componentDidMount() {
 		axios
-			.get("http://localhost:5000/insurance")
+			.get("https://cs4750express-ogldiadhsq-uk.a.run.app/insurance")
 			.then(json =>
 				json.data.map(item => ({
 					id: item.ssn,

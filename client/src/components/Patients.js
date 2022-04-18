@@ -10,7 +10,7 @@ function PatientDemo() {
     const [name, setName] = useState("")
 
     useEffect(() => {
-        fetch("/patients").then(
+        fetch("https://cs4750express-ogldiadhsq-uk.a.run.app/patients").then(
           response => response.json()
         ).then(
           data =>{

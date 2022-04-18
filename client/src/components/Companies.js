@@ -7,7 +7,7 @@ function Companies() {
     const [data, setData] = useState([{}])
 
     useEffect(() => {
-        fetch("http://localhost:5000/companies").then(
+        fetch("https://cs4750express-ogldiadhsq-uk.a.run.app/companies").then(
           response => response.json()
         ).then(
           data =>{

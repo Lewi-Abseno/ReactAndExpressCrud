@@ -42,7 +42,7 @@ class Providers extends Component {
 
 	componentDidMount() {
 		axios
-			.get("http://localhost:5000/provider")
+			.get("https://cs4750express-ogldiadhsq-uk.a.run.app/provider")
 			.then(json =>
 				json.data.map(item => ({
 					id: item.ssn,

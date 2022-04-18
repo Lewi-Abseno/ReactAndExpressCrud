@@ -10,7 +10,7 @@ function Medical() {
     const [name, setName] = useState("")
 
     useEffect(() => {
-        fetch("/medicalinfo").then(
+        fetch("https://cs4750express-ogldiadhsq-uk.a.run.app/medicalinfo").then(
           response => response.json()
         ).then(
           data =>{

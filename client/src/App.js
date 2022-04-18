@@ -13,6 +13,7 @@ import Medical from './components/Medical';
 import Doctor from './components/Doctor';
 import Providers from './components/Providers';
 import Appointment from './components/Appointment';
+import AddPatient from './components/AddPatient';
 
 
 class App extends Component {
@@ -22,7 +23,7 @@ class App extends Component {
   }
   
   callAPI() {
-    fetch("http://localhost:5000/API")
+    fetch("https://cs4750express-ogldiadhsq-uk.a.run.app/API")
         .then(res => res.text())
         .then(res => this.setState({ apiResponse: res }));
   } 
@@ -51,6 +52,8 @@ class App extends Component {
                   <NavDropdown.Item href="Companies">
                     Companies
                   </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item href="/AddPatient">Add New Patient</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             </Navbar.Collapse>
@@ -65,6 +68,7 @@ class App extends Component {
           <Route path="/Doctor" element={<Doctor />} />
           <Route path="/Providers" element={<Providers />} />
           <Route path="/Appointments" element={<Appointment />} />
+          <Route path="/AddPatient" element={<AddPatient />} />
         </Routes>
       </Router>
     );

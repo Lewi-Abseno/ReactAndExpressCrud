@@ -7,7 +7,7 @@ function Doctor() {
   const [data, setData] = useState([{}])
 
   useEffect(() => {
-      fetch("http://localhost:5000/doctors").then(
+      fetch("https://cs4750express-ogldiadhsq-uk.a.run.app/doctors").then(
         response => response.json()
       ).then(
         data =>{

@@ -30,7 +30,7 @@ class Appointment extends Component {
 
 	componentDidMount() {
 		axios
-			.get("http://localhost:5000/appointments")
+			.get("https://cs4750express-ogldiadhsq-uk.a.run.app/appointments")
 			.then(json =>
 				json.data.map(item => ({
 					id: item.ssn,
